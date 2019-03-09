@@ -1,0 +1,4 @@
+mongoimport --db mongo-exercises --collection courses --drop 
+--file exercise-data.json --jsonArray
+//create db mongo-exercises with empty collection courses and import data
+//from file exercise-data.json
