@@ -31,7 +31,7 @@ router.post("/", async (req, res) => {
     res.send(movie);
 });
 
-/* put movie (replace existing one with new one) */
+/* PUT movie (replace existing one with new one) */
 router.put("/:id", async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
