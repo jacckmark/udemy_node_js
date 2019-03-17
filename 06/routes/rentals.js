@@ -47,7 +47,7 @@ router.post("/", async (req, res) => {
         }
         //we don't define dateOut etc. because this are the values that will be
         //chaged when needed with put method and right now we don't even know
-        //when the rental will be returned
+        //when the rental will be returned 
     });
 
     try {
