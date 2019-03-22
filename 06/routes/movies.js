@@ -60,7 +60,7 @@ router.put("/:id", async (req, res) => {
     res.send(movie);
 });
 
-/* DELETE genre */
+/* DELETE movie */
 router.delete("/:id", async (req, res) => {
     const movie = await Movie.findByIdAndRemove(req.params.id);
 
@@ -72,7 +72,7 @@ router.delete("/:id", async (req, res) => {
     res.send(movie);
 });
 
-/* GET one genre (by id) */
+/* GET one movie (by id) */
 router.get("/:id", async (req, res) => {
     const movie = await Movie.findById(req.params.id);
 
