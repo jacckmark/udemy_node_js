@@ -2,15 +2,17 @@ const mongoose = require("mongoose");
 const express = require("express");
 const { Genre, validate } = require("../models/genre");
 const router = express.Router();
+const auth = require("../middleware/auth");
+const admin = require("../middleware/admin");
 
 /* GET all genres (sorted by name) */
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
     const genres = await Genre.find().sort("name");
     res.send(genres);
 });
 
 /* POST genre (new one) */
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -21,7 +23,7 @@ router.post("/", async (req, res) => {
 });
 
 /* put genre (replace existing one with new one) */
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -42,7 +44,8 @@ router.put("/:id", async (req, res) => {
 });
 
 /* DELETE genre */
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", [auth, admin], async (req, res) => {
+    //here we are using two middleware functions
     const genre = await Genre.findByIdAndRemove(req.params.id);
 
     if (!genre)
@@ -54,7 +57,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 /* GET one genre (by id) */
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
     const genre = await Genre.findById(req.params.id);
 
     if (!genre)

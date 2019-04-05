@@ -1,19 +1,20 @@
 const mongoose = require("mongoose");
 const express = require("express");
+const auth = require("../middleware/auth");
 //object destructuring we write customer schema from file customers.js (in folder
-//models) to Customer property and joi function for validation to validate 
+//models) to Customer property and joi function for validation to validate
 //property
 const { Customer, validate } = require("../models/customer");
 const router = express.Router();
 
 /* GET all customers (sorted by name) */
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
     const customers = await Customer.find().sort("name");
     res.send(customers);
 });
 
 /* POST customer (new one) */
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -28,7 +29,7 @@ router.post("/", async (req, res) => {
 });
 
 /* PUT customer (replace existing one with new one) */
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -49,7 +50,7 @@ router.put("/:id", async (req, res) => {
 });
 
 /* DELETE customer */
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
     const customer = await Customer.findByIdAndRemove(req.params.id);
 
     if (!customer)
@@ -61,7 +62,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 /* GET one customer (by id) */
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
     const customer = await Customer.findById(req.params.id);
 
     if (!customer)

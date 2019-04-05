@@ -3,15 +3,16 @@ const express = require("express");
 const { Movie, validate } = require("../models/movie");
 const { Genre } = require("../models/genre");
 const router = express.Router();
+const auth = require("../middleware/auth");
 
 /* GET all movies (sorted by name) */
-router.get("/", async (req, res) => {
+router.get("/", auth,async (req, res) => {
     const movies = await Movie.find().sort("name");
     res.send(movies);
 });
 
 /* POST movie (new one) */
-router.post("/", async (req, res) => {
+router.post("/", auth,async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -32,7 +33,7 @@ router.post("/", async (req, res) => {
 });
 
 /* PUT movie (replace existing one with new one) */
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -61,7 +62,7 @@ router.put("/:id", async (req, res) => {
 });
 
 /* DELETE movie */
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
     const movie = await Movie.findByIdAndRemove(req.params.id);
 
     if (!movie)
